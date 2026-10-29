@@ -3,4 +3,5 @@
   <Project Path="BudgetFlow.Application/BudgetFlow.Application.csproj" />
   <Project Path="BudgetFlow.Domain/BudgetFlow.Domain.csproj" />
   <Project Path="BudgetFlow.Infrastructure/BudgetFlow.Infrastructure.csproj" />
+  <Project Path="BudgetFlow.Tests/BudgetFlow.Tests.csproj" />
 </Solution>

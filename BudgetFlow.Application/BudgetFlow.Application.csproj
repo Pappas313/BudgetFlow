@@ -18,4 +18,8 @@
     <ProjectReference Include="..\BudgetFlow.Domain\BudgetFlow.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="BudgetFlow.Tests" />
+  </ItemGroup>
+
 </Project>

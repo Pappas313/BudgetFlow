@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.14" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.14" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageReference Include="xunit" Version="2.9.3" />
@@ -20,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BudgetFlow.API\BudgetFlow.API.csproj" />
     <ProjectReference Include="..\BudgetFlow.Application\BudgetFlow.Application.csproj" />
     <ProjectReference Include="..\BudgetFlow.Domain\BudgetFlow.Domain.csproj" />
     <ProjectReference Include="..\BudgetFlow.Infrastructure\BudgetFlow.Infrastructure.csproj" />

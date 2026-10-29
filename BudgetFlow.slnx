@@ -1,7 +1,26 @@
 <Solution>
-  <Project Path="BudgetFlow.API/BudgetFlow.API.csproj" />
-  <Project Path="BudgetFlow.Application/BudgetFlow.Application.csproj" />
-  <Project Path="BudgetFlow.Domain/BudgetFlow.Domain.csproj" />
-  <Project Path="BudgetFlow.Infrastructure/BudgetFlow.Infrastructure.csproj" />
-  <Project Path="BudgetFlow.Tests/BudgetFlow.Tests.csproj" />
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="Development" />
+    <BuildType Name="Release" />
+  </Configurations>
+  <Project Path="BudgetFlow.API/BudgetFlow.API.csproj">
+    <BuildType Solution="Development|*" Project="Release" />
+  </Project>
+  <Project Path="BudgetFlow.Application/BudgetFlow.Application.csproj">
+    <BuildType Solution="Development|*" Project="Release" />
+  </Project>
+  <Project Path="BudgetFlow.Domain/BudgetFlow.Domain.csproj">
+    <BuildType Solution="Development|*" Project="Release" />
+  </Project>
+  <Project Path="BudgetFlow.ETL/BudgetFlow.ETL.dtproj" Type="c9674dcb-5085-4a16-b785-4c70dd1589bd">
+    <BuildType Project="Development" />
+    <Platform Project="?" />
+  </Project>
+  <Project Path="BudgetFlow.Infrastructure/BudgetFlow.Infrastructure.csproj">
+    <BuildType Solution="Development|*" Project="Release" />
+  </Project>
+  <Project Path="BudgetFlow.Tests/BudgetFlow.Tests.csproj">
+    <BuildType Solution="Development|*" Project="Release" />
+  </Project>
 </Solution>

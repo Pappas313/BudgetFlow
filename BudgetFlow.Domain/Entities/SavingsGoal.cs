@@ -41,4 +41,28 @@ public class SavingsGoal : Entity, IAuditableEntity, ISoftDeletable
         TargetDateUtc = targetDateUtc;
         CreatedAtUtc = DateTimeOffset.UtcNow;
     }
+
+    /// <summary>
+    /// Records a contribution toward the goal, increasing the current saved amount.
+    /// </summary>
+    public void RecordContribution(decimal amount)
+    {
+        CurrentAmount += amount;
+        LastModifiedAtUtc = DateTimeOffset.UtcNow;
+    }
+
+    /// <summary>
+    /// Logically deletes (archives) the savings goal, preserving contribution history.
+    /// </summary>
+    public void Archive()
+    {
+        if (IsDeleted)
+        {
+            return;
+        }
+
+        IsDeleted = true;
+        DeletedAtUtc = DateTimeOffset.UtcNow;
+        LastModifiedAtUtc = DeletedAtUtc;
+    }
 }

@@ -63,3 +63,11 @@ app.MapControllers();
 app.MapHealthChecks("/health");
 
 app.Run();
+
+/// <summary>
+/// Partial class marker so the API's entry point can be referenced by
+/// <see cref="Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory{TEntryPoint}"/> in integration tests.
+/// </summary>
+public partial class Program
+{
+}

@@ -25,6 +25,8 @@ public interface IBudgetFlowDbContext
 
     DbSet<SavingsGoal> SavingsGoals { get; }
 
+    DbSet<SavingsContribution> SavingsContributions { get; }
+
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
     Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default);

@@ -67,6 +67,9 @@ namespace BudgetFlow.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("AccountType")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("ApplicationUserId")
                         .HasColumnType("uniqueidentifier");
 
@@ -217,6 +220,10 @@ namespace BudgetFlow.Infrastructure.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<string>("ExternalReference")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -232,7 +239,13 @@ namespace BudgetFlow.Infrastructure.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
-                    b.Property<Guid>("TransactionCategoryId")
+                    b.Property<Guid?>("TransactionCategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("TransactionType")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("TransferGroupId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -242,6 +255,12 @@ namespace BudgetFlow.Infrastructure.Migrations
                     b.HasIndex("OccurredAtUtc");
 
                     b.HasIndex("TransactionCategoryId");
+
+                    b.HasIndex("TransferGroupId");
+
+                    b.HasIndex("BankAccountId", "ExternalReference")
+                        .IsUnique()
+                        .HasFilter("[ExternalReference] IS NOT NULL");
 
                     b.ToTable("FinancialTransactions", (string)null);
                 });
@@ -287,6 +306,50 @@ namespace BudgetFlow.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("MonthlyBudgets", (string)null);
+                });
+
+            modelBuilder.Entity("BudgetFlow.Domain.Entities.RefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ApplicationUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("CreatedAtUtc")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("CreatedByIp")
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<DateTimeOffset>("ExpiresAtUtc")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("ReplacedByTokenId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("RevokedAtUtc")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("RevokedByIp")
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("TokenHash")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("TokenHash")
+                        .IsUnique();
+
+                    b.ToTable("RefreshTokens", (string)null);
                 });
 
             modelBuilder.Entity("BudgetFlow.Domain.Entities.ReportExport", b =>
@@ -674,8 +737,7 @@ namespace BudgetFlow.Infrastructure.Migrations
                     b.HasOne("BudgetFlow.Domain.Entities.TransactionCategory", "TransactionCategory")
                         .WithMany("FinancialTransactions")
                         .HasForeignKey("TransactionCategoryId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("BankAccount");
 

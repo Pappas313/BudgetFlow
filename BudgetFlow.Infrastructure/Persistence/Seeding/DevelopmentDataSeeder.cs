@@ -286,7 +286,11 @@ public static class DevelopmentDataSeeder
                 ? $"{category.Name} payment"
                 : $"{category.Name} expense";
 
-            var transaction = new FinancialTransaction(account.Id, category.Id, amount, occurredAtUtc, description);
+            var transactionType = isIncome
+                ? BudgetFlow.Domain.Enums.TransactionType.Income
+                : BudgetFlow.Domain.Enums.TransactionType.Expense;
+
+            var transaction = new FinancialTransaction(account.Id, transactionType, amount, occurredAtUtc, category.Id, description);
             transactions.Add(transaction);
 
             balances[account.Id] += amount;

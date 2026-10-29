@@ -19,6 +19,10 @@ public class BankAccountConfiguration : IEntityTypeConfiguration<BankAccount>
         builder.Property(x => x.Institution)
             .HasMaxLength(200);
 
+        builder.Property(x => x.AccountType)
+            .IsRequired()
+            .HasConversion<int>();
+
         builder.Property(x => x.Currency)
             .IsRequired()
             .HasMaxLength(3);

@@ -42,4 +42,31 @@ public class Bill : Entity, IAuditableEntity, ISoftDeletable
         IsRecurring = isRecurring;
         CreatedAtUtc = DateTimeOffset.UtcNow;
     }
+
+    /// <summary>
+    /// Updates the mutable details of the bill. Ownership must be validated by the caller.
+    /// </summary>
+    public void UpdateDetails(string name, decimal amount, DateTimeOffset dueDateUtc, bool isRecurring)
+    {
+        Name = name;
+        Amount = amount;
+        DueDateUtc = dueDateUtc;
+        IsRecurring = isRecurring;
+        LastModifiedAtUtc = DateTimeOffset.UtcNow;
+    }
+
+    /// <summary>
+    /// Logically deletes (archives) the bill, preserving its payment history.
+    /// </summary>
+    public void Archive()
+    {
+        if (IsDeleted)
+        {
+            return;
+        }
+
+        IsDeleted = true;
+        DeletedAtUtc = DateTimeOffset.UtcNow;
+        LastModifiedAtUtc = DeletedAtUtc;
+    }
 }

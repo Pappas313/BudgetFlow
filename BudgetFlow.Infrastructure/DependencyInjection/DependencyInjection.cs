@@ -1,4 +1,5 @@
 using BudgetFlow.Application.Abstractions;
+using BudgetFlow.Application.Features.Authentication;
 using BudgetFlow.Infrastructure.Identity;
 using BudgetFlow.Infrastructure.Persistence;
 using BudgetFlow.Infrastructure.Services;
@@ -30,6 +31,8 @@ public static class DependencyInjection
             options.UseSqlServer(connectionString, sqlOptions =>
                 sqlOptions.MigrationsAssembly(typeof(BudgetFlowDbContext).Assembly.FullName)));
 
+        services.AddScoped<IBudgetFlowDbContext>(sp => sp.GetRequiredService<BudgetFlowDbContext>());
+
         services.AddDataProtection();
 
         services.AddIdentityCore<ApplicationUser>(options =>
@@ -39,6 +42,12 @@ public static class DependencyInjection
             .AddRoles<IdentityRole<Guid>>()
             .AddEntityFrameworkStores<BudgetFlowDbContext>()
             .AddDefaultTokenProviders();
+
+        services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.SectionName));
+        services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<IAuthService, AuthService>();
+        services.AddHttpContextAccessor();
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
 
         // TODO: Register repository implementations once they are created.
 

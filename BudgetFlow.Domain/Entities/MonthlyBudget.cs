@@ -38,4 +38,13 @@ public class MonthlyBudget : Entity, IAuditableEntity
         BudgetedAmount = budgetedAmount;
         CreatedAtUtc = DateTimeOffset.UtcNow;
     }
+
+    /// <summary>
+    /// Updates the allocated budget amount. Ownership must be validated by the caller.
+    /// </summary>
+    public void UpdateBudgetedAmount(decimal budgetedAmount)
+    {
+        BudgetedAmount = budgetedAmount;
+        LastModifiedAtUtc = DateTimeOffset.UtcNow;
+    }
 }

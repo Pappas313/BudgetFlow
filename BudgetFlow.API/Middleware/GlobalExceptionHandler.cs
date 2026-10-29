@@ -1,4 +1,5 @@
 using System.Net;
+using BudgetFlow.Application.Exceptions;
 using FluentValidation;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
@@ -57,7 +58,10 @@ public sealed class GlobalExceptionHandler : IExceptionHandler
     {
         ValidationException => ((int)HttpStatusCode.BadRequest, "Validation Failed"),
         ArgumentException => ((int)HttpStatusCode.BadRequest, "Invalid Argument"),
+        NotFoundException => ((int)HttpStatusCode.NotFound, "Resource Not Found"),
         KeyNotFoundException => ((int)HttpStatusCode.NotFound, "Resource Not Found"),
+        ConflictException => ((int)HttpStatusCode.Conflict, "Conflict"),
+        ForbiddenAccessException => ((int)HttpStatusCode.Forbidden, "Forbidden"),
         UnauthorizedAccessException => ((int)HttpStatusCode.Unauthorized, "Unauthorized"),
         _ => ((int)HttpStatusCode.InternalServerError, "An unexpected error occurred"),
     };

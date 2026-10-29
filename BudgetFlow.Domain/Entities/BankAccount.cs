@@ -1,4 +1,5 @@
 using BudgetFlow.Domain.Common;
+using BudgetFlow.Domain.Enums;
 
 namespace BudgetFlow.Domain.Entities;
 
@@ -12,6 +13,8 @@ public class BankAccount : Entity, IAuditableEntity, ISoftDeletable
     public string Name { get; private set; } = string.Empty;
 
     public string? Institution { get; private set; }
+
+    public AccountType AccountType { get; private set; }
 
     public string Currency { get; private set; } = "USD";
 
@@ -36,12 +39,47 @@ public class BankAccount : Entity, IAuditableEntity, ISoftDeletable
     {
     }
 
-    public BankAccount(Guid applicationUserId, string name, string currency, string? institution = null)
+    public BankAccount(
+        Guid applicationUserId,
+        string name,
+        string currency,
+        AccountType accountType = AccountType.Checking,
+        string? institution = null,
+        decimal openingBalance = 0m)
     {
         ApplicationUserId = applicationUserId;
         Name = name;
         Currency = currency;
+        AccountType = accountType;
         Institution = institution;
+        CurrentBalance = openingBalance;
         CreatedAtUtc = DateTimeOffset.UtcNow;
+    }
+
+    /// <summary>
+    /// Updates the mutable details of the account. Ownership must be validated by the caller.
+    /// </summary>
+    public void UpdateDetails(string name, string currency, AccountType accountType, string? institution)
+    {
+        Name = name;
+        Currency = currency;
+        AccountType = accountType;
+        Institution = institution;
+        LastModifiedAtUtc = DateTimeOffset.UtcNow;
+    }
+
+    /// <summary>
+    /// Logically deletes (archives) the account, preserving historical data.
+    /// </summary>
+    public void Archive()
+    {
+        if (IsDeleted)
+        {
+            return;
+        }
+
+        IsDeleted = true;
+        DeletedAtUtc = DateTimeOffset.UtcNow;
+        LastModifiedAtUtc = DeletedAtUtc;
     }
 }

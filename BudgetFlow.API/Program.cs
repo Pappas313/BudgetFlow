@@ -34,6 +34,7 @@ builder.Services.AddProblemDetails();
 // Application and Infrastructure layer service registration.
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddJwtAuthentication(builder.Configuration);
 
 var app = builder.Build();
 
@@ -54,6 +55,7 @@ app.UseHttpsRedirection();
 
 app.UseCors(BudgetFlow.API.Extensions.CorsServiceCollectionExtensions.ReactClientPolicy);
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

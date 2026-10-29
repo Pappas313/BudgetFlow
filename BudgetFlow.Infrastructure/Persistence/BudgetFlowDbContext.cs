@@ -1,8 +1,10 @@
+using BudgetFlow.Application.Abstractions;
 using BudgetFlow.Domain.Entities;
 using BudgetFlow.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace BudgetFlow.Infrastructure.Persistence;
 
@@ -10,7 +12,7 @@ namespace BudgetFlow.Infrastructure.Persistence;
 /// The primary EF Core database context for BudgetFlow, combining ASP.NET Core
 /// Identity storage with the application's domain persistence model.
 /// </summary>
-public class BudgetFlowDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
+public class BudgetFlowDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>, IBudgetFlowDbContext
 {
     public BudgetFlowDbContext(DbContextOptions<BudgetFlowDbContext> options)
         : base(options)
@@ -36,6 +38,11 @@ public class BudgetFlowDbContext : IdentityDbContext<ApplicationUser, IdentityRo
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
 
     public DbSet<ReportExport> ReportExports => Set<ReportExport>();
+
+    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+
+    public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default) =>
+        Database.BeginTransactionAsync(cancellationToken);
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

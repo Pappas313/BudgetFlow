@@ -1,3 +1,4 @@
+using System.Reflection;
 using Microsoft.OpenApi;
 
 namespace BudgetFlow.API.Extensions;
@@ -19,6 +20,32 @@ public static class SwaggerServiceCollectionExtensions
                 Version = "v1",
                 Description = "API for the BudgetFlow personal budgeting application.",
             });
+
+            var securityScheme = new OpenApiSecurityScheme
+            {
+                Name = "Authorization",
+                Description = "Enter a valid JWT access token. Example: \"Bearer eyJhbGciOi...\"",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.Http,
+                Scheme = "bearer",
+                BearerFormat = "JWT",
+            };
+
+            options.AddSecurityDefinition("Bearer", securityScheme);
+
+            var securitySchemeReference = new OpenApiSecuritySchemeReference("Bearer");
+
+            options.AddSecurityRequirement(_ => new OpenApiSecurityRequirement
+            {
+                { securitySchemeReference, new List<string>() },
+            });
+
+            var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFilename);
+            if (File.Exists(xmlPath))
+            {
+                options.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
+            }
         });
 
         return services;
